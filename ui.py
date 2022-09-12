@@ -3,7 +3,7 @@ from quiz_brain import QuizBrain
 
 THEM_COLOR = "#0F3460"
 FONT = ("Arial", 20, "italic")
-TEXT_COLOR = "#533483"
+TEXT_COLOR = "#181818"
 
 
 class QuizUi:
