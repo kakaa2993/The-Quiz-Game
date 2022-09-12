@@ -12,7 +12,7 @@ class QuizUi:
         self.windows.title(string="Quiz Game")
         self.windows.config(background=THEM_COLOR)
 
-        self.canvas = Canvas(width=300, height=250)
+        self.canvas = Canvas(width=300, height=250, background="white")
         self.question_text = self.canvas.create_text(
             150, 125, text="the text here", width=250, font=FONT, fill=THEM_COLOR
         )
@@ -24,27 +24,40 @@ class QuizUi:
 
         # Buttons
         true_img = PhotoImage(file="./images/true.png")
-        self.true_button = Button(image=true_img, highlightthickness=0, command=self.true_button)
+        self.true_button = Button(image=true_img, highlightthickness=0, command=self.true_pressed)
         self.true_button.grid(column=0, row=2, padx=20, pady=20)
 
         false_img = PhotoImage(file="./images/false.png")
-        self.false_button = Button(image=false_img, highlightthickness=0, command=self.false_button)
+        self.false_button = Button(image=false_img, highlightthickness=0, command=self.false_pressed)
         self.false_button.grid(column=1, row=2, padx=20, pady=20)
 
         self.get_next_question()
         self.windows.mainloop()
 
     def get_next_question(self):
-        q_text = self.quiz.next_question()
-
-        self.canvas.itemconfig(self.question_text, text=q_text)
-
-    def true_button(self):
-        self.quiz.check_answer(answer="True")
+        self.canvas.config(background="white")
         if self.quiz.still_have_questions():
-            self.get_next_question()
+            self.score.config(text=f"Score: {self.quiz.score}")
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.question_text, text=q_text)
+        else:
+            self.canvas.itemconfig(
+                self.question_text,
+                text=f"You've completed the quizzes.\nYour final score is: {self.quiz.score}/{self.quiz.question_number}")
+            self.true_button.config(state="disabled")
+            self.false_button.config(state="disabled")
 
-    def false_button(self):
-        self.quiz.check_answer(answer="False")
-        if self.quiz.still_have_questions():
-            self.get_next_question()
+    def true_pressed(self):
+        is_right = self.quiz.check_answer(answer="True")
+        self.give_feedback(is_right)
+
+    def false_pressed(self):
+        is_right = self.quiz.check_answer(answer="False")
+        self.give_feedback(is_right)
+
+    def give_feedback(self, is_right: bool):
+        if is_right:
+            self.canvas.configure(background="Green")
+        else:
+            self.canvas.configure(background="Red")
+        self.windows.after(ms=1000, func=self.get_next_question)
