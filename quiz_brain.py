@@ -18,7 +18,8 @@ class QuizBrain:
         return f"Q.{self.question_number}: {current_text_question}"
 
     def check_answer(self, answer):
-        correct_answer = self.current_question
+        correct_answer = self.question_list[self.question_number]["correct_answer"]
+        print(correct_answer)
         if answer == correct_answer:
             # "You are right!"
             self.score += 1

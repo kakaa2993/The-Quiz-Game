@@ -11,12 +11,11 @@ class QuizUi:
         self.quiz = quiz_brain
         self.windows = Tk()
         self.windows.title(string="Quiz Game")
-        self.windows.minsize(width=400, height=300)
-        self.windows.config(background=THEM_COLOR,padx=100)
+        self.windows.config(background=THEM_COLOR, padx=50)
 
-        self.canvas = Canvas(width=400, height=350, background="white")
+        self.canvas = Canvas(width=300, height=250, background="white")
         self.question_text = self.canvas.create_text(
-            200, 175, text="the text here", width=350, font=FONT, fill=TEXT_COLOR
+            150, 125, text="the text here", width=250, font=FONT, fill=TEXT_COLOR
         )
         self.canvas.grid(column=0, row=1, columnspan=2, padx=20, pady=20)
 
@@ -51,13 +50,15 @@ class QuizUi:
 
     def true_pressed(self):
         is_right = self.quiz.check_answer(answer="True")
+        print(is_right)
         self.give_feedback(is_right)
 
     def false_pressed(self):
         is_right = self.quiz.check_answer(answer="False")
+        print(is_right)
         self.give_feedback(is_right)
 
-    def give_feedback(self, is_right: bool):
+    def give_feedback(self, is_right):
         if is_right:
             self.canvas.configure(background="Green")
         else:
